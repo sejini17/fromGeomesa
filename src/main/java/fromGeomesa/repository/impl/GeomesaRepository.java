@@ -5,7 +5,7 @@ import org.geotools.data.simple.SimpleFeatureStore;
 import org.geotools.factory.Hints;
 import org.geotools.filter.identity.FeatureIdImpl;
 import org.geotools.filter.text.ecql.ECQL;
-import org.locationtech.geomesa.fs.storage.interop.PartitionSchemeUtils;
+//import org.locationtech.geomesa.fs.storage.interop.PartitionSchemeUtils;
 import org.locationtech.geomesa.index.geotools.GeoMesaDataStore;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -24,17 +24,18 @@ import java.util.*;
 public class GeomesaRepository implements IGeomesaRepository{
     @Override
     public  DataStore createDataStore(Map<String, String> params) throws IOException {
-        String calalog = params.get("hbase.catalog");
-        GeoMesaDTO geoMesaDTO =new GeoMesaDTO();
-        geoMesaDTO.setParams(new HashMap<String, String>(){
-            {
-//                put("fs.path", "file:///tmp/dstest/");
-                put("fs.path", "hdfs://sjk-centos:8020/fs-root/" + calalog);
-//                put("hbase.catalog", "dstest");
-                put("fs.encoding", "parquet");
-            }
-        });
-        params = geoMesaDTO.getParams();
+//        String calalog = params.get("hbase.catalog");
+//        GeoMesaDTO geoMesaDTO =new GeoMesaDTO();
+//        geoMesaDTO.setParams(new HashMap<String, String>(){
+//            {
+////                put("fs.path", "file:///tmp/dstest/");
+////                put("fs.path", "hdfs://sjk-centos:8020/fs-root/" + calalog);
+////                put("fs.encoding", "parquet");
+//
+//                put("hbase.catalog", "ptest");
+//            }
+//        });
+//        params = geoMesaDTO.getParams();
 
         System.out.println(params);
 
@@ -55,10 +56,10 @@ public class GeomesaRepository implements IGeomesaRepository{
     public  void createSchema(DataStore datastore, SimpleFeatureType sft) throws IOException {
         System.out.println("正在创建数据结构: " + DataUtilities.encodeType(sft));
         // GeoMesa의 FS을 사용하는 경우에 추가되는 스키마 정의 코드
-        PartitionSchemeUtils.addToSft(
-                sft,
-                PartitionSchemeUtils.apply(sft, "daily,z2-4bit", Collections.emptyMap())
-        );
+//        PartitionSchemeUtils.addToSft(
+//                sft,
+//                PartitionSchemeUtils.apply(sft, "daily,z2-4bit", Collections.emptyMap())
+//        );
 
         datastore.createSchema(sft);
         System.out.println();

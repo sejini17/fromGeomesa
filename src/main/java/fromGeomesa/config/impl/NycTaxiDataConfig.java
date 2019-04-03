@@ -47,7 +47,7 @@ public class NycTaxiDataConfig implements IGeoMesaDataConfig {
     public SimpleFeatureType getSimpleFeatureType() {
         if(sft==null){
             //构造SimpleFeatureType(schema)类型
-            StringBuilder attribute=new StringBuilder();
+            StringBuilder attribute = new StringBuilder();
             attribute.append("medallion:String:index=true,");//index=true标记此属性用于索引
             attribute.append("hack_license:String,");
             attribute.append("vendor_id:String,");
@@ -58,8 +58,8 @@ public class NycTaxiDataConfig implements IGeoMesaDataConfig {
             attribute.append("passenger_count:Integer,");
             attribute.append("trip_time_in_secs:Integer,");
             attribute.append("trip_distance:Double,");
-            //attribute.append("*geom:MultiPoint:srid=4326");//*表示几何结构，且用于索引
-            attribute.append("*geom:Point:srid=4326");//*表示几何结构，且用于索引
+            attribute.append("*geom:MultiPoint:srid=4326");//*表示几何结构，且用于索引
+//            attribute.append("*geom:Point:srid=4326");//*表示几何结构，且用于索引
 
             //使用GeoMesa API的SimpleFeatureTyp方法创建简单的特征类型
             sft= SimpleFeatureTypes.createType(getTypeName(),attribute.toString());
@@ -79,7 +79,7 @@ public class NycTaxiDataConfig implements IGeoMesaDataConfig {
             List<SimpleFeature> features=new ArrayList<>();
 
             //读取nyctaxi.csv文件
-            URL input = getClass().getClassLoader().getResource("nyctaxi/nyctaxi201301_100k.csv");
+            URL input = getClass().getClassLoader().getResource("nyctaxi201301_100k.csv");
             if(input==null){
                 throw new RuntimeException("无法加载nyctaxi.csv文件");
             }
@@ -112,13 +112,13 @@ public class NycTaxiDataConfig implements IGeoMesaDataConfig {
                         builder.set("trip_distance",record.get(9));
 
                         //使用WKT来表示几何图形,经度(lng)优先排序
-                        Double pickup_longitude=Double.parseDouble(record.get(10));
-                        Double pickup_latitude=Double.parseDouble(record.get(11));
-                        Double dropoff_longitude=Double.parseDouble(record.get(12));
-                        Double dropoff_latitude=Double.parseDouble(record.get(13));
+                        double pickup_longitude=Double.parseDouble(record.get(10));
+                        double pickup_latitude=Double.parseDouble(record.get(11));
+                        double dropoff_longitude=Double.parseDouble(record.get(12));
+                        double dropoff_latitude=Double.parseDouble(record.get(13));
 
-//                        builder.set("geom", "MULTIPOINT(" + pickup_longitude + " " + pickup_latitude + ","+ dropoff_longitude+" "+dropoff_latitude+")");
-                        builder.set("geom", "POINT(" + pickup_longitude + " " + pickup_latitude + ")");
+                        builder.set("geom", "MULTIPOINT(" + pickup_longitude + " " + pickup_latitude + ","+ dropoff_longitude+" "+dropoff_latitude+")");
+//                        builder.set("geom", "POINT(" + pickup_longitude + " " + pickup_latitude + ")");
 
                         //告诉GeoTools使用自己提供的ID
                         builder.featureUserData(Hints.USE_PROVIDED_FID,Boolean.TRUE);
@@ -183,7 +183,7 @@ public class NycTaxiDataConfig implements IGeoMesaDataConfig {
             //bbox范围
             Filter spatialFilter = ff.bbox("geom",-75,40,-73,41.5,"EPSG:4326");
             //组合时空过滤器
-            spatialFilter=ff.and(dateFilter,spatialFilter);
+            subsetFilter=ff.and(dateFilter,spatialFilter);
         }
         return subsetFilter;
     }
